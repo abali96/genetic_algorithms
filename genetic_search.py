@@ -82,6 +82,8 @@ def maximize():
 		population = crossover(population)
 		population = mutate(population)
 
-	print population
+	print "To maximize function: "
+	print "Input: %d" % int(population[0],2)
+	print "Output %d" % f(int(population[0],2))
 
 maximize()
