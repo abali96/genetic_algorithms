@@ -26,6 +26,9 @@ def compute_fitness(binary_list):
 	function_output = map(f,map(lambda x: int(x, 2), binary_list))
 	avg = reduce(lambda x, y: x + y, function_output)/len(function_output) # we cant assume avg isn't 0
 	
+	if avg is 0:
+		return False
+
 	for i in range(len(binary_list)):
 		fitness_list.append(function_output[i]/avg)
 	
@@ -34,48 +37,55 @@ def compute_fitness(binary_list):
 
 def roulette(strs):
 	spins = list()
-	ranges = numpy.cumsum(compute_fitness(strs))[:-1]
-	for i in range(len(strs)):
-		spin_val = random.random()
-		index = 0
-		
-		while index > len(strs) and spin_val < ranges[index]:
-			index += 1
+	if compute_fitness:
+		ranges = numpy.cumsum(compute_fitness(strs))[:-1]
 
-		if spin_val > ranges[-1]:
-			index += 1
+		for i in range(len(strs)):
+			spin_val = random.random()
+			index = 0
 
-		spins.append(strs[index])
+			while index < len(strs) - 1 and spin_val > ranges[index]:
+				index += 1
+
+			spins.append(strs[index])
 
 	return spins
 
 
 def mutate(population):
 	if random.randrange(0, len(population * len(population[0]))) is 0:
-		population[random.randrange(0, len(population))][random.randrange(0, len(population[0]))]
-	return population
+		index1 = random.randrange(0, len(population))
+		index2 = random.randrange(0, len(population[0]))
+		population = map(lambda x: list(x), population)
+		population[index1][index2] = str(int(not (bool(int(population[index1[index2]]))))) # have to convert this to a list first!
+	return map(lambda x: "".join(x), population)
 	
 
 def crossover(new_population):
 	new_population = map(lambda x: list(x), new_population)
 	for i in range(len(new_population)//2):
 		cross_index = random.randrange(1, len(new_population))
-		
-		for j in range(cross_index, len(new_population)):
-			temp = new_population[i][j]
-			new_population[i][j] = new_population[-i][j]
-			new_population[-i][j] = temp
+		# print "crossing over " + str(new_population[i]) + "with " + str(new_population[-i]) + "at index " + cross_index
+		# print i
+		# print new_population[i]
+
+		# for j in range(cross_index, len(new_population[0])):
+		# 	temp = new_population[i][j]
+		# 	new_population[i][j] = new_population[-i][j]
+		# 	new_population[-i][j] = temp
 
 	return map(lambda x: "".join(x), new_population)
 
 def maximize():
-	population = gen_strings(10, 4)
-	for i in range(20):
-		print population
+	population = gen_strings(5, 4)
+	for i in range(1):
 		population = roulette(population)
-		population = crossover(population)
-		population = mutate(population)
+		if population and population[1:] is not population[-1:]:
+			population = crossover(population)
+			population = mutate(population)
+		else:
+			population = gen_strings(5, 4)
 
-	print population
+	# check if the intervals in the fitness thing are even
 
 maximize()
