@@ -62,10 +62,11 @@ def mutate(population):
 	
 
 def crossover(new_population):
+	print new_population
 	new_population = map(lambda x: list(x), new_population)
 	for i in range(len(new_population)//2):
 		cross_index = random.randrange(1, len(new_population))
-		# print "crossing over " + str(new_population[i]) + "with " + str(new_population[-i]) + "at index " + cross_index
+		print "crossing over " + str(new_population[i]) + "with " + str(new_population[-i-1]) + "at index " + str(cross_index)
 		# print i
 		# print new_population[i]
 
@@ -74,6 +75,7 @@ def crossover(new_population):
 		# 	new_population[i][j] = new_population[-i][j]
 		# 	new_population[-i][j] = temp
 
+	print new_population
 	return map(lambda x: "".join(x), new_population)
 
 def maximize():
@@ -82,7 +84,7 @@ def maximize():
 		population = roulette(population)
 		if population and population[1:] is not population[-1:]:
 			population = crossover(population)
-			population = mutate(population)
+			# population = mutate(population)
 		else:
 			population = gen_strings(5, 4)
 
