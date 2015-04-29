@@ -34,17 +34,16 @@ def compute_fitness(binary_list):
 
 def roulette(strs):
 	spins = list()
-	if compute_fitness:
-		ranges = numpy.cumsum(compute_fitness(strs))[:-1]
+	ranges = numpy.cumsum(compute_fitness(strs))[:-1]
 
-		for i in range(len(strs)):
-			spin_val = random.random()
-			index = 0
+	for i in range(len(strs)):
+		spin_val = random.random()
+		index = 0
 
-			while index < len(strs) - 1 and spin_val > ranges[index]:
-				index += 1
+		while index < len(strs) - 1 and spin_val > ranges[index]:
+			index += 1
 
-			spins.append(strs[index])
+		spins.append(strs[index])
 
 	return spins
 
